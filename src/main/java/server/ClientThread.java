@@ -21,7 +21,7 @@ public class ClientThread implements Runnable {
 				)	{
 			//String message = "";
 			String line = inStream.readLine();
-			while(line != null) {
+			while(line != null && line!="bye") {
 				//message = line;
 				System.out.println("Client says : " + line);
 				outStream.println("Server says received your message: "+ line);
@@ -32,7 +32,7 @@ public class ClientThread implements Runnable {
 				}
 
 			}
-			System.out.println("Client says : " + line);
+			System.out.println("Closing msg says : " + line);
 			socket.close();
 		} catch (IOException e) {
 
