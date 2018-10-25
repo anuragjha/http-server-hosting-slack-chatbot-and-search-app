@@ -52,9 +52,4 @@ public class HTTPFetcher {
 		return request;
 	}
 	
-	public static void main(String[] args)	{
-		HTTPFetcher fet = new HTTPFetcher();
-		System.out.println(fet.download("www.google.com", "/search?q=anuragjha"));
-	}
-	
 }

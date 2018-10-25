@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class TestClient {
 	
-	private static int id = 0;
-	private final int PORT = 5000;
+	private volatile static int id = 0;
+	private final int PORT = 8080;
 	private final String ip = "127.0.0.1";
 
 	public TestClient()	{
@@ -38,20 +38,46 @@ public class TestClient {
 				Scanner reader = new Scanner(System.in)
 				){
 
+			//get request
 			String userline = reader.nextLine();
+			//String userline = "http://127.0.0.1/reviewSearch?query=mountFuji";
 			System.out.println("client msg : " + userline);
-			while(userline != null && !userline.equals("bye"))	{
+			while(/*userline != null &&*/ !userline.equals("bye"))	{
 				out.println(userline);
+				//receive response
 				System.out.println("Ack userLine: " + in.readLine());
-				userline = reader.nextLine();
+				//get request
+	 			userline = reader.nextLine();
 			}
 			out.println("client last message");
-			out.println("exit");
+			reader.close();
+			in.close();
+			out.close();
+			client.close();
 		}
 	}
+	
+	
+	public void clientClose()	{
+		
+	}
+	/**
+	 * getRequest method creates a http request and returns the request string
+	 * @param host
+	 * @param path
+	 * @return
+	 */
+	private static String getRequest(String host, String path) {
+		String request = "GET " + path + " HTTP/1.1" + "\n" //GET request
+				+ "Host: " + host + "\n" //Host header required for HTTP/1.1
+				+ "Connection: keep-alive\n" //make sure the server closes the connection after we fetch one page
+				+ "\r\n";								
+		return request;
+	}
+	
 
 	public static void main(String[] args)	{
 		TestClient tc = new TestClient();
-		TestClient tc2 = new TestClient();
+	
 	}
 }

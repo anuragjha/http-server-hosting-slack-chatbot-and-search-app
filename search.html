@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Search Amazon Reviews</title>
+  <meta name="review search" content="Review Search">
+  <meta name="Anurag" content="reviewSearch">
+
+</head>
+
+
+<body>
+  <h3>Search in Amazon Reviews</h3>
+  <form action="http://localhost:8080" method="post">
+    Search : 
+    <input type="radio" name="searchIn" value="reviewsSearch"> Term 
+    <input type="radio" name="searchIn" value="findAsin"> Asin <br/>
+    Query :
+    <input type="text" name="query" /> <br/>
+    <input type="submit" value="Submit" /> 
+  </form>
+
+</body>
+
+</html>
+
+GET / HTTP/1.1
+GET /?searchIn=reviewsSearch&query=abc HTTP/1.1
