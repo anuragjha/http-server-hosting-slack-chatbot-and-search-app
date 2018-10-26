@@ -3,37 +3,62 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import handlers.Handlers;
+import handlers.RequestHandler;
+
 public class TestServer {
+	
+	private final int PORT;
 	
 	private ServerSocket server;
 	private ExecutorService executer;
-	private volatile boolean shouldRun = true;
+	private volatile boolean shouldRun;
+	private HashMap<String, Handlers> pathMapper;
+	private Handlers handler;
 	
 
 	public TestServer(int port)	{
-		this.manageServer(port);
+		this.PORT = port;
+		try {
+			this.server = new ServerSocket(port);
+		} catch (IOException e) {
+			System.out.println("Error in constructing server");
+			System.exit(1);
+		}
+		this.shouldRun = true;
 	}
 
-	private void manageServer(int port)	{
+	public void startup()	{
 		try {
-	 		this.runServer(port);
+	 		this.runServer(this.PORT);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Error in starting the server");
+			//Have to convert to server running, 
+		}
+		finally	{
+			try {
+				this.server.close();
+			} catch (IOException e) {
+				System.out.println("Error in closing the server");
+			}
 		}
 	}
 
+	
 	private void runServer(int port) throws IOException	{
 
 		System.out.println("starting server");
-		server = new ServerSocket(port);
 		
-		executer = Executors.newFixedThreadPool(5);
+		
+		this.executer = Executors.newFixedThreadPool(5);
 		
 		while(shouldRun)	{
+			this.pathMapper = new HashMap<String, Handlers>();
 			
 			Socket clientSocket = server.accept();
 			Runnable RequestHandler = new RequestHandler(clientSocket);
@@ -61,6 +86,23 @@ public class TestServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		finally	{
+			this.pathMapper = null; //at the end mapper is empty and will; have to be refilled
+		}
+	}
+	
+	public void addMapping(String path, Handlers handler) {
+		
+		switch(path)	{
+		case "/reviewsearch" :
+			pathMapper.put(path, handler);
+			break;
+		case "/find" :
+			pathMapper.put(path, handler);
+			break;
+		}
+		
+		
 	}
 
 

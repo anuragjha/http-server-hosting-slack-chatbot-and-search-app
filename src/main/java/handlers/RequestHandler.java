@@ -1,4 +1,4 @@
-package server;
+package handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import protocolParser.RequestLineParser;
 
 
-public class RequestHandler implements Runnable {
+public class RequestHandler implements Handlers,Runnable {
 
 	private Socket socket = null;
 
@@ -70,17 +70,16 @@ public class RequestHandler implements Runnable {
 				line = inStream.readLine();
 			}
 			
-			
-			
 			System.out.println("Request Line: " + requestLine);
 			System.out.println("Headers: \n" + requestHeader);
+			
 			//reading first line of body for post method /// getting parameters for post method
-//			if(new RequestLineParser(requestLine).checkIfPOST())	{
-//				for(int i = 0; i<=0; i++)	{
-//				String requestBodyTopLine = inStream.readLine();
-//				System.out.println("requestBodyTopLine: \n" + requestBodyTopLine);
-//				}
-//			}
+			if(new RequestLineParser(requestLine).checkIfPOST())	{
+				//for(int i = 0; i<=0; i++)	{
+				String requestBodyTopLine = inStream.readLine();
+				System.out.println("requestBodyTopLine: \n" + requestBodyTopLine);
+			//	}
+			}
 
 			/// To start from processing request line ///// !!!!!!!!!!!!!!!!!
 			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
