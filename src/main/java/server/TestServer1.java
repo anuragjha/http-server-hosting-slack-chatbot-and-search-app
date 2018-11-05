@@ -10,21 +10,29 @@ import java.util.concurrent.TimeUnit;
 
 import handlers.FindHandler;
 import handlers.Handlers;
-import handlers.RequestHandler;
+import handlers.RequestHandler1;
 import handlers.ReviewSearchHandler;
 
-public class TestServer {
+/**
+ * TestServer1 class implements server
+ * @author anuragjha
+ *
+ */
+public class TestServer1 {
 
 	private final int PORT;
 
 	private ServerSocket server;
 	private ExecutorService executer;
-	private volatile boolean shouldRun;
 	private HashMap<String, Handlers> pathMapper;
-	//private Handlers handler;
+	
+	private volatile boolean shouldRun;
 
-
-	public TestServer(int port)	{
+	/**
+	 * Constructing Server
+	 * @param port
+	 */
+	public TestServer1(int port)	{
 		this.PORT = port;
 		this.pathMapper = new HashMap<String, Handlers>();
 		try {
@@ -34,16 +42,37 @@ public class TestServer {
 			System.out.println("Error in constructing server");
 			System.exit(1);
 		}
-		this.shouldRun = true;
+		
 	}
 
-
+	
+	/**
+	 * @return the pathMapper
+	 */
+	public HashMap<String, Handlers> getPathMapper() {
+		return pathMapper;
+	}
+	
+	
+	/**
+	 * addMapping method maps a request path to a specific handler
+	 * @param path
+	 * @param handler
+	 */
+	public void addMapping(String path, Handlers handler) {
+		pathMapper.put(path, handler);
+	}
+	
+	
+	/**
+	 * startup method starts the server
+	 */
 	public void startup() {
+		this.shouldRun = true;
 		try {
 			this.runServer(this.PORT);
 		} catch (IOException ioe) {
 			System.out.println("Error in starting the server");
-			//Have to convert to server running, 
 		}
 		finally	{
 			try {
@@ -55,6 +84,11 @@ public class TestServer {
 	}
 
 
+	/**
+	 * runServer method implements the server and handles incoming client requests
+	 * @param port
+	 * @throws IOException
+	 */
 	private void runServer(int port) throws IOException	{
 
 		this.executer = Executors.newFixedThreadPool(5);
@@ -62,8 +96,8 @@ public class TestServer {
 
 		while(shouldRun) {		
 			Socket clientSocket = server.accept();
-			Runnable RequestHandler = new RequestHandler(clientSocket, this.pathMapper);
-			executer.execute(RequestHandler);	
+			Runnable RequestHandler1 = new RequestHandler1(clientSocket, this.pathMapper);
+			executer.execute(RequestHandler1);	
 			if(!shouldRun) {
 				this.closeServer();
 			}
@@ -74,6 +108,10 @@ public class TestServer {
 
 	}
 
+	
+	/**
+	 * closeServer method closes the server thread pool and empties the pathMapper
+	 */
 	private void closeServer() {
 
 		try {
@@ -95,24 +133,12 @@ public class TestServer {
 	}
 
 
-	public void addMapping(String path, Handlers handler) {
-		pathMapper.put(path, handler);
-	}
-
-
-	/**
-	 * @return the pathMapper
-	 */
-	public HashMap<String, Handlers> getPathMapper() {
-		return pathMapper;
-	}
-
 
 	public static void main(String[] args)	{
 		TestServer ts = new TestServer(8080);
 		ts.addMapping("/reviewsearch", new ReviewSearchHandler());
 		ts.addMapping("/find", new FindHandler());
-		System.out.println("hashmap: " + ts.pathMapper);
+		System.out.println("hashmap: " + ts.getPathMapper().toString());
 		ts.startup();
 	}
 
