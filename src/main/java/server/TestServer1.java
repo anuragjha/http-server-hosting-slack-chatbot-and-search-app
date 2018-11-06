@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import handlers.FindHandler;
 import handlers.Handlers;
-import handlers.RequestHandler1;
 import handlers.ReviewSearchHandler;
 
 /**
@@ -135,7 +134,7 @@ public class TestServer1 {
 
 
 	public static void main(String[] args)	{
-		TestServer ts = new TestServer(8080);
+		TestServer1 ts = new TestServer1(8080);
 		ts.addMapping("/reviewsearch", new ReviewSearchHandler());
 		ts.addMapping("/find", new FindHandler());
 		System.out.println("hashmap: " + ts.getPathMapper().toString());

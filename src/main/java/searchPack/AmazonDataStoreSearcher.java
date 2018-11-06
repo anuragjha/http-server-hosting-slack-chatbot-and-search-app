@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cs601.project1;
+package searchPack;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -38,20 +38,28 @@ public class AmazonDataStoreSearcher {
 
 	//finding ASIN
 	/**
-	 * getAsinFind method is a public method that calls asinFind method
+	 * getAsinFind method is a public method that calls asinFind method in Reviews
 	 * @param cmdTerm
 	 */
-	public LinkedList<AmazonReviews> getAsinFind(String cmdTerm)	{
-		return this.asinFind(cmdTerm);
+	public LinkedList<AmazonReviews> getAsinFindReviews(String cmdTerm)	{
+		return this.asinFindReviews(cmdTerm);
+	}
+	
+	/**
+	 * getAsinFind method is a public method that calls asinFind method in QAs
+	 * @param cmdTerm
+	 */
+	public LinkedList<AmazonQuesAns> getAsinFindQAs(String cmdTerm)	{
+		return this.asinFindQAs(cmdTerm);
 	}
 
 
 	/**
-	 * asinFind method finds all the Review and QA record for matching ASIN
+	 * asinFind method finds all the Review record for matching ASIN
 	 * @param cmdTerm
 	 */
-	private LinkedList<AmazonReviews> asinFind(String cmdTerm)	{
-		//this.responseResult = new StringBuilder();
+	private LinkedList<AmazonReviews> asinFindReviews(String cmdTerm)	{
+		
 		LinkedList<AmazonReviews> results = new LinkedList<AmazonReviews>();
 		this.resultCount = 0;
 
@@ -76,6 +84,36 @@ public class AmazonDataStoreSearcher {
 		}
 	}
 
+	
+	/**
+	 * asinFind method finds all the QA record for matching ASIN
+	 * @param cmdTerm
+	 */
+	private LinkedList<AmazonQuesAns> asinFindQAs(String cmdTerm)	{
+
+		LinkedList<AmazonQuesAns> results = new LinkedList<AmazonQuesAns>();
+		this.resultCount = 0;
+
+		for(AmazonQuesAns quesAns : AmazonDataStore.ONE.getQuesAnsDataStore().values())	{
+			if(quesAns.getAsin().equalsIgnoreCase(cmdTerm))	{
+				this.resultCount += 1;
+				//System.out.println("\n"+review.toString());
+				///outStream.write("\n"+review.toString());
+				///////////////this.responseResult.append("\n"+review.toString());
+				results.add(quesAns);
+			}
+		}
+
+		if(this.resultCount == 0)	{
+			System.out.println("No results found");
+			///this.responseResult.append("No result found");
+			return null;
+		}
+		else	{
+			System.out.println("\nResults found: "+ this.resultCount+"\n");
+			return results;
+		}
+	}
 
 
 

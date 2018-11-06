@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cs601.project1;
+package searchPack;
 
 import java.util.HashMap;
 
@@ -50,14 +50,17 @@ public class InvertedIndex {
 	 */
 	public void getTextStringAndAddWords(String newString, int recordId)	{
 		String[] newWordStringArray = newString.split(" ");
-		for(String word : newWordStringArray)	{
-			if((word != null) && (word != ""))	{
-				String newWord = word.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
-				if(newWord.length() > 0)	{
-					add(newWord, recordId); // update InvertedIndex for the particular word
+		if(newWordStringArray != null) {
+			for(String word : newWordStringArray)	{
+				if((word != null) && (word != ""))	{
+					String newWord = word.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+					if(newWord.length() > 0)	{
+						add(newWord, recordId); // update InvertedIndex for the particular word
+					}
 				}
 			}
 		}
+
 	}
 
 

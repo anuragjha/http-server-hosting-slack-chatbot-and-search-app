@@ -6,8 +6,6 @@ package httpObjects;
 import java.util.HashMap;
 import java.util.Map;
 
-import htmlGenerator.HttpConstants;
-
 /**
  * @author anuragjha
  *
@@ -45,12 +43,11 @@ public class RequestLineParser {
 
 
 	private boolean isRequestValid()	{
-		System.out.println("http version:::::: " + requestLineParts[2]);
-		if((this.requestLineParts.length == 3))	{ //add more hecks
-			//if(this.checkIfHttpVersion1()) {
+		if((this.requestLineParts.length == 3))	{ //add more checks
+			if((this.checkIfHttpVersion1() || (this.checkIfHttpVersion0()))) {
 			
 				return true;
-			//}
+			}
 		}
 		return false;
 	}
@@ -106,8 +103,8 @@ public class RequestLineParser {
 	}
 
 	private boolean checkIfHttpVersion1()	{
-		if(this.validRequest) {
-			if(this.requestLineParts[2].matches("HTTP/1.1"))	{
+		if((this.requestLineParts.length == 3)) {
+			if(this.requestLineParts[2].trim().equals("HTTP/1.1"))	{
 				return true;
 			}	
 		}
@@ -115,7 +112,7 @@ public class RequestLineParser {
 	}
 
 	private boolean checkIfHttpVersion0()	{
-		if(this.validRequest) {
+		if((this.requestLineParts.length == 3)) {
 			if(this.requestLineParts[2].matches("HTTP/1.0"))	{
 				return true;
 			}	
@@ -156,7 +153,10 @@ public class RequestLineParser {
 				if(queries.containsKey(keyValuePair.split("=")[0])) { //duplicate key names
 					return null;
 				}
-				queries.put(keyValuePair.split("=")[0], keyValuePair.split("=")[1]);
+				if(keyValuePair.split("=").length == 2) {
+					queries.put(keyValuePair.split("=")[0], keyValuePair.split("=")[1]);
+				}
+				
 			}
 			return queries;
 		}

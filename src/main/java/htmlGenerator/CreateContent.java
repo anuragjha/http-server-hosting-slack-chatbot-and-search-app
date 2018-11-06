@@ -6,8 +6,10 @@ package htmlGenerator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import cs601.project1.AmazonDataStore;
-import cs601.project1.AmazonReviews;
+import httpObjects.HttpConstants;
+import searchPack.AmazonDataStore;
+import searchPack.AmazonQuesAns;
+import searchPack.AmazonReviews;
 
 /**
  * @author anuragjha
@@ -19,7 +21,7 @@ public class CreateContent {
 	private StringBuilder responseBody;
 	private String responseType;
 	private String queryTerm;
-	
+
 	public CreateContent() {
 		this.responseHeader = new StringBuilder();
 		this.responseBody = new StringBuilder();
@@ -46,48 +48,6 @@ public class CreateContent {
 		this.queryTerm = queryTerm;
 	}
 
-	public String buildContent() {
-		switch(this.responseType) {
-		case "/" :
-			this.buildContentHome();
-			break;
-		//case "404" :
-		//	this.buildContent404();
-		//	break;
-		//case "405" :
-		//	this.buildContent405();
-		//	break;
-		//case "/reviewsearch" :
-		//	if(this.queryTerm.equals("")) {
-		//		this.buildReviewSearchForm();	
-		//	} else {
-		//		this.buildReviewSearchResult(this.queryTerm);
-		//	}
-
-		//	break;
-		//case "/find" :
-		//	if(this.queryTerm.equals("")) {
-		//		this.buildFindForm();
-		//	} else {
-		//		this.buildFindResult(this.queryTerm);
-		//	}
-
-		//	break;
-		//case "/slackbot" :
-		//	//if(this.queryTerm.equals("")) {
-		//		System.out.println("building Chat form");
-		//		this.buildChatForm();
-			//} else {
-				//this.buildFindResult(this.queryTerm);
-			//}
-
-		//	break;
-			
-		}
-		//System.out.println(this.responseHeader.toString() + this.responseBody.toString());
-		return this.responseHeader.toString() + this.responseBody.toString();
-
-	}
 
 	public String buildReviewSearchResult(String queryTerm) {
 		String[] terms = queryTerm.split("\\+");
@@ -99,7 +59,7 @@ public class CreateContent {
 			this.writeReviewSearchResult(term.replaceAll("[^A-Za-z0-9]", "").toLowerCase());
 		}
 		//this.writeReviewSearchResult(queryTerm);
-		
+
 		this.writeHtmlBodyEnd();
 
 		return this.responseHeader.toString() + this.responseBody.toString();
@@ -114,9 +74,9 @@ public class CreateContent {
 		for(String term : terms) {
 			this.writeFindResult(term.replaceAll("[^A-Za-z0-9]", "").toLowerCase());
 		}
-		
+
 		this.writeHtmlBodyEnd();
-		
+
 		return this.responseHeader.toString() + this.responseBody.toString();
 
 	}
@@ -128,7 +88,7 @@ public class CreateContent {
 		this.writeHtmlBodyStart();
 		this.writeFindAsinForm();
 		this.writeHtmlBodyEnd();
-		
+
 		return this.responseHeader.toString() + this.responseBody.toString();
 	}
 
@@ -138,34 +98,45 @@ public class CreateContent {
 		this.writeHtmlBodyStart();
 		this.writeReviewSearchForm();
 		this.writeHtmlBodyEnd();
-		
+
 		return this.responseHeader.toString() + this.responseBody.toString();
 
 	}
-	
+
 	public String buildChatForm() {
 		this.responseHeader.append(HttpConstants.OK);
 		this.writeHtmlHead("Slack chat");
 		this.writeHtmlBodyStart();
 		this.writeChatForm();
 		this.writeHtmlBodyEnd();
+
+		return this.responseHeader.toString() + this.responseBody.toString();
+	}
+	
+	public String buildChatFormAfterSuccess() {
+		this.responseHeader.append(HttpConstants.OK);
+		this.writeHtmlHead("Slack chat");
+		this.writeHtmlBodyStart();
+		this.writeSlackSuccess();
+		this.writeChatForm();
+		this.writeHtmlBodyEnd();
+		
+		return this.responseHeader.toString() + this.responseBody.toString();
+	}
+	
+	
+	public String buildChatFormAfterFail() {
+		this.responseHeader.append(HttpConstants.OK);
+		this.writeHtmlHead("Slack chat");
+		this.writeHtmlBodyStart();
+		this.writeSlackFail();
+		this.writeChatForm();
+		this.writeHtmlBodyEnd();
 		
 		return this.responseHeader.toString() + this.responseBody.toString();
 	}
 
-	public void buildContentHome() {
-		this.responseHeader.append("HTTP/1.0 200 OK\n" + "\r\n");
 
-		this.writeHtmlHead("Search Amazon Reviews");
-
-		this.writeHtmlBodyStart();		  
-
-		this.writeReviewSearchForm();
-		this.writeFindAsinForm();
-		this.writeChatForm();
-
-		this.writeHtmlBodyEnd();	
-	}
 
 	public String buildContent404() {
 		this.responseHeader.append(HttpConstants.PAGENOTFOUND);
@@ -173,7 +144,7 @@ public class CreateContent {
 		this.writeHtmlBodyStart();
 		this.write404Response();
 		this.writeHtmlBodyEnd();
-		
+
 		return this.responseHeader.toString() + this.responseBody.toString();
 
 	}
@@ -183,9 +154,22 @@ public class CreateContent {
 		this.responseHeader.append(HttpConstants.METHODNOTFOUND);
 		this.writeHtmlHead("405 Method Not Supported");
 		this.writeHtmlBodyStart();
-		this.write404Response();
+		this.write405Response();
 		this.writeHtmlBodyEnd();
-		
+
+		return this.responseHeader.toString() + this.responseBody.toString();
+
+	}
+	
+	
+	public String buildContent400() {
+		//this.responseHeader.append("HTTP/1.0 405 Method Not Allowed\n" + "\r\n");
+		this.responseHeader.append(HttpConstants.BADREQUEST);
+		this.writeHtmlHead("400 Bad Request");
+		this.writeHtmlBodyStart();
+		this.write400Response();
+		this.writeHtmlBodyEnd();
+
 		return this.responseHeader.toString() + this.responseBody.toString();
 
 	}
@@ -195,10 +179,10 @@ public class CreateContent {
 		this.responseBody.append("<!doctype html>");
 		this.responseBody.append("<html lang=\"en\">");
 		this.responseBody.append("<head>");
-		this.responseBody.append("<meta charset=\"utf-8\">");		
+		this.responseBody.append("<meta charset=\"utf-8\"/>");		
 		this.responseBody.append("<title>" + title+ "</title>");		  
-		this.responseBody.append("<meta name="+title+ "content="+title+"  >");
-		this.responseBody.append("<meta name=\"Anurag\" content=" + title+ ">");	  
+		this.responseBody.append("<meta name="+title+ "content="+title+"  />");
+		this.responseBody.append("<meta name=\"Anurag\" content=" + title+ "/>");	  
 		//this.responseBody.append("<link rel=\"stylesheet\" href=\"src⁩/main⁩/resources⁩/css/styles.css?v=1.0\">");		  
 		this.responseBody.append("</head>");
 	}
@@ -216,21 +200,21 @@ public class CreateContent {
 		this.responseBody.append("</html>");	
 
 	}
+
+	private void writeSlackSuccess() {
+		this.responseBody.append("<h3>Message sent successfully</h3>");
+		
+	}
 	
-//	private void writeSimpleForm(String ) {
-//		this.responseBody.append("<h3>Search Asins in Amazon Reviews</h3>");	
-//		this.responseBody.append("<form action=\"http://localhost:8080/find\" method=\"post\">");	
-//		this.responseBody.append("<label name=\"findAsin\" value=\"findAsin\">Find Asin</label> <br/>");	
-//		this.responseBody.append("<input type=\"text\" name=\"asin\" /> <br/>");
-//		this.responseBody.append("<input type=\"submit\" value=\"Submit\" />");	    
-//		this.responseBody.append("</form>");		      
-//		this.responseBody.append("</div>"); 
-//
-//	}
+	private void writeSlackFail() {
+		this.responseBody.append("<h3>Message NOT sent</h3>");
+		
+	}
+	
 
 	private void writeFindAsinForm() {
 		this.responseBody.append("<h3>Search Asins in Amazon Reviews</h3>");	
-		this.responseBody.append("<form action=\"http://localhost:8080/find\" method=\"post\">");	
+		this.responseBody.append("<form action=\"/find\" method=\"post\">");	
 		this.responseBody.append("<label name=\"findAsin\" value=\"findAsin\">Find Asin</label> <br/>");	
 		this.responseBody.append("<input type=\"text\" name=\"asin\" /> <br/>");
 		this.responseBody.append("<input type=\"submit\" value=\"Submit\" />");	    
@@ -241,17 +225,17 @@ public class CreateContent {
 
 	private void writeReviewSearchForm() {
 		this.responseBody.append("<h3>Search Term in Amazon Reviews</h3>");	
-		this.responseBody.append("<form action=\"http://localhost:8080/reviewsearch\" method=\"post\"/>");	
+		this.responseBody.append("<form action=\"/reviewsearch\" method=\"post\"/>");	
 		this.responseBody.append("<label name=\"searchTerm\" value=\"searchTerm\">Search Term</label> <br/>");	
 		this.responseBody.append("<input type=\"text\" name=\"query\" /> <br/>");
 		this.responseBody.append("<input type=\"submit\" value=\"Submit\" />");	    
 		this.responseBody.append("</form>");
 
 	}
-	
+
 	private void writeChatForm() {
 		this.responseBody.append("<h3>Send message on Slack</h3>");	
-		this.responseBody.append("<form action=\"http://localhost:9090/slackbot\" method=\"post\"/>");	
+		this.responseBody.append("<form action=\"/slackbot\" method=\"post\"/>");	
 		this.responseBody.append("<label name=\"slackMessage\" value=\"slackMessage\">Send Message</label> <br/>");	
 		this.responseBody.append("<input type=\"text\" name=\"message\" /> <br/>");
 		this.responseBody.append("<input type=\"submit\" value=\"Submit\" />");	    
@@ -263,6 +247,11 @@ public class CreateContent {
 		this.responseBody.append("<h1>Page Not Found</h1>");	
 		this.responseBody.append("<p>Sorry, but the page you were trying to view does not exist.</p>");		
 	}
+	
+	private void write400Response()	{
+		this.responseBody.append("<h1>Bad Request</h1>");	
+		this.responseBody.append("<p>Sorry, but the request was incorrect.</p>");		
+	}
 
 
 	private void write405Response()	{
@@ -270,7 +259,7 @@ public class CreateContent {
 		this.responseBody.append("<p>Sorry, but the method you were trying to use is not yet supported.</p>");		
 	}
 
-	
+
 	private void writeHtmlTableStartReviewsResult()	{
 		this.responseBody.append("<table style=\"width:100%\">");
 		this.responseBody.append("<tr>");
@@ -279,33 +268,26 @@ public class CreateContent {
 		this.responseBody.append("<th>Review Text</th>");
 		this.responseBody.append("<th>Overall</th>");
 		this.responseBody.append("<th>Frequency</th>");
-		
+		this.responseBody.append("</tr>");
+
 	}
-	
-	
+
+
 	private void writeHtmlTableEnd()	{
 		this.responseBody.append("</table>");
 	}
 
 	private void writeReviewSearchResult(String queryTerm) {
-		System.out.println("!!!!!!!!!!! in writeReviewSearchResult");
-		int resultCount = 0;
-		
+		System.out.println("in writeReviewSearchResult");
+		//int resultCount = 0;
+
 		if((AmazonDataStore.ONE.getSearcher().getReviewSearch(queryTerm)) != null)	{
 			this.responseBody.append("<h3>Results of Search in Amazon Reviews</h3>");
 			this.writeHtmlTableStartReviewsResult();
-//			this.responseBody.append("<table style=\"width:100%\">");
-//			this.responseBody.append("<tr>");
-//			this.responseBody.append("<th>Reviewer ID</th>");
-//			this.responseBody.append("<th>Asin</th>");
-//			this.responseBody.append("<th>Review Text</th>");
-//			this.responseBody.append("<th>Overall</th>");
-//			this.responseBody.append("<th>Frequency</th>");
-			this.responseBody.append("</tr>");
+
+			this.responseBody.append("<h3>Search Term is - " + queryTerm + "</h3>");
 			for(Map.Entry<Integer, Integer> recordId :
 				AmazonDataStore.ONE.getReviewWordDataStore().searchWord(queryTerm).createSortedOutput().entrySet())	{
-				//this.responseBody.append("\nSearched term: "+ queryTerm + "\t|\tFrequency: "+recordId.getValue());
-				//this.responseBody.append(AmazonDataStore.ONE.getReviewDataStore().get(recordId.getKey()).toString());
 				AmazonReviews thisReview = AmazonDataStore.ONE.getReviewDataStore().get(recordId.getKey());
 				this.responseBody.append("<tr>");
 				this.responseBody.append("<td>"+ thisReview.getReviewerID() +"</td>");
@@ -314,23 +296,23 @@ public class CreateContent {
 				this.responseBody.append("<td>"+ thisReview.getOverall() +"</td>");
 				this.responseBody.append("<td>"+ recordId.getValue() +"</td>");
 				this.responseBody.append("</tr>");
-				
+
 			}
 			this.writeHtmlTableEnd();
-//			this.responseBody.append("</table>");
+
 		} else	{
-			this.responseBody.append("No result found");
+			this.responseBody.append("<h3>No result found in Review files</h3>");
 		}
 
 		//this.responseBody.append(AmazonDataStore.ONE.getSearcher().getReviewSearch(queryTerm));
 		//		
 
 	}
-	
-	
-	
+
+
+
 	private void writeHtmlTableFindResult()	{
-		
+
 		this.responseBody.append("<table style=\"width:100%\">");
 		this.responseBody.append("<tr>");
 		this.responseBody.append("<th>Reviewer ID</th>");
@@ -338,41 +320,61 @@ public class CreateContent {
 		this.responseBody.append("<th>Review Text</th>");
 		this.responseBody.append("<th>Overall</th>");
 		this.responseBody.append("</tr>");
-		
+
 	}
-	
-	
+
+
+	private void writeHtmlTableFindResultForQA()	{
+
+		this.responseBody.append("<table style=\"width:100%\">");
+		this.responseBody.append("<tr>");
+		this.responseBody.append("<th>Asin</th>");
+		this.responseBody.append("<th>Question</th>");
+		this.responseBody.append("<th>Answer</th>");
+		this.responseBody.append("</tr>");
+
+	}
+
+
 
 	private void writeFindResult(String queryTerm) {
-		//System.out.println(" !!!!!!!!!! in writeFindResult");
-		
-		LinkedList<AmazonReviews> results = AmazonDataStore.ONE.getSearcher().getAsinFind(queryTerm);
-		if(results != null)	{
+		System.out.println("in writeFindResult");
+
+		LinkedList<AmazonReviews> resultsRev = AmazonDataStore.ONE.getSearcher().getAsinFindReviews(queryTerm);
+		if(resultsRev != null)	{
 			this.responseBody.append("<h3>Results of Find in Amazon Reviews</h3>");
 			this.writeHtmlTableFindResult();
-//			this.responseBody.append("<table style=\"width:100%\">");
-//			this.responseBody.append("<tr>");
-//			this.responseBody.append("<th>Reviewer ID</th>");
-//			this.responseBody.append("<th>Asin</th>");
-//			this.responseBody.append("<th>Review Text</th>");
-//			this.responseBody.append("<th>Overall</th>");
-//			this.responseBody.append("</tr>");
-			for(AmazonReviews eachResult : results)	{
+
+			for(AmazonReviews eachResult : resultsRev)	{
 				this.responseBody.append("<tr>");
 				this.responseBody.append("<td>"+ eachResult.getReviewerID() +"</td>");
 				this.responseBody.append("<td>"+ eachResult.getAsin() +"</td>");
 				this.responseBody.append("<td>"+ eachResult.getReviewText() +"</td>");
 				this.responseBody.append("<td>"+ eachResult.getOverall() +"</td>");
-				this.responseBody.append("</tr>");
-				//this.responseBody.append(eachResult.toString());	
+				this.responseBody.append("</tr>");	
 			}
 			//this.responseBody.append("</table>");
 			this.writeHtmlTableEnd();
-			
+
 		} else {
-			this.responseBody.append("No result found");
+			this.responseBody.append("<h3>No result found in Review files</h3>");
 		}
 
+
+		LinkedList<AmazonQuesAns> resultsQa = AmazonDataStore.ONE.getSearcher().getAsinFindQAs(queryTerm);
+		if(resultsQa != null)	{
+			this.writeHtmlTableFindResultForQA();
+			for(AmazonQuesAns eachResult : resultsQa)	{
+				this.responseBody.append("<tr>");
+				this.responseBody.append("<td>"+ eachResult.getAsin() +"</td>");
+				this.responseBody.append("<td>"+ eachResult.getQuestion() +"</td>");
+				this.responseBody.append("<td>"+ eachResult.getAnswer() +"</td>");
+				this.responseBody.append("</tr>");	
+			}
+			this.writeHtmlTableEnd();
+		} else {
+			this.responseBody.append("<h3>No result found in QA files</h3>");
+		}
 
 	}
 

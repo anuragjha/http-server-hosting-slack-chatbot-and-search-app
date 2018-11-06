@@ -2,10 +2,10 @@ package handlers;
 
 import java.util.HashMap;
 
-import cs601.project1.AmazonDataStore;
 import htmlGenerator.CreateContent;
 import httpObjects.HTTPRequest;
 import httpObjects.HTTPResponse;
+import searchPack.AmazonDataStore;
 
 public class ReviewSearchHandler implements Handlers,Runnable {
 	
@@ -45,7 +45,8 @@ public class ReviewSearchHandler implements Handlers,Runnable {
 		//if(queries == null) {
 			//String content = new CreateContent("/reviewsearch").buildContent();
 			//response.setContent(new CreateContent("/reviewsearch").buildContent());
-			response.setContent(new CreateContent().buildReviewSearchForm());
+		response.setContent(new CreateContent().buildReviewSearchForm());
+			
 		//}
 		
 	}
@@ -59,7 +60,10 @@ public class ReviewSearchHandler implements Handlers,Runnable {
 			//String content = new CreateContent("/reviewsearch", queries.get("query")).buildContent();
 			//response.setContent(new CreateContent("/reviewsearch", queries.get("query")).buildContent());
 			response.setContent(new CreateContent().buildReviewSearchResult(queries.get("query")));
+		} else {
+			response.setContent(new CreateContent().buildContent400());
 		}
+		
 	}
 	
 	

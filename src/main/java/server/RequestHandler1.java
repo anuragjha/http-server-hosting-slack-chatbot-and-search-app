@@ -1,7 +1,7 @@
 /**
  * 
  */
-package handlers;
+package server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,9 +11,11 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+import handlers.Handlers;
 import htmlGenerator.CreateContent;
 import httpObjects.HTTPRequest;
 import httpObjects.HTTPResponse;
+import httpObjects.HttpConstants;
 
 /**
  * @author anuragjha
@@ -46,7 +48,7 @@ public class RequestHandler1 implements Runnable {
 			if(request != null) {
 				this.createHTTPResponse(writer);
 			}
-			
+
 
 		}catch(IOException ioe)	{
 			System.out.println("IO exception in Request Handler");
@@ -63,20 +65,20 @@ public class RequestHandler1 implements Runnable {
 	private void readHTTPRequest(InputStream instream) throws IOException {
 		//reads the request line - method, query string and http protocol version
 		//if(instream.available() > 0)	{
-			String requestLine = oneLine(instream);
-			//request.setRequestLine(oneLine(instream));
-			System.out.println("request: " + requestLine);
+		String requestLine = oneLine(instream);
+		//request.setRequestLine(oneLine(instream));
+		System.out.println("request: " + requestLine);
 
-			if(requestLine != null && !requestLine.trim().isEmpty())	{ //main logic 
-				request	= new HTTPRequest(requestLine);
-				//reads the rest of the Request Header	
-				this.readHTTPRequestHeaders(instream);		
+		if(requestLine != null && !requestLine.trim().isEmpty())	{ //main logic 
+			request	= new HTTPRequest(requestLine);
+			//reads the rest of the Request Header	
+			this.readHTTPRequestHeaders(instream);		
 
-			} else { //requestLine is empty
-				//request	= new HTTPRequest();
-				System.out.println("Empty Request");
+		} else { //requestLine is empty
+			//request	= new HTTPRequest();
+			System.out.println("Empty Request");
 
-			}
+		}
 		//}
 	}
 
@@ -190,18 +192,35 @@ public class RequestHandler1 implements Runnable {
 		//getting the correct handler
 		System.out.println("RequestLine Method and Path: " + request.toString());
 
+		//if correct method
+		if(!(request.getParser().checkIfGET()) &&
+				!(request.getParser().checkIfPOST())) {  //method not found 405
+			response.setContent(new CreateContent().buildContent405()); 
+		
+		} else { //method found
 
+			if(this.pathMapper.containsKey(request.getParser().getRequestLinePath())) { //path found
+				System.out.println("pathmapper contains the path");
+				(this.pathMapper.get(request.getParser().getRequestLinePath())).handle(request, response); //
+			} else {  //path not found
+				//404
+				System.out.println("404 page");
+				response.setContent(new CreateContent().buildContent404()); ////change this !!!!!
+			}
 
-		if(this.pathMapper.containsKey(request.getParser().getRequestLinePath())) {
-			System.out.println("pathmapper contains the path");
-			(this.pathMapper.get(request.getParser().getRequestLinePath())).handle(request, response); //
-		} else {
-			//404
-			System.out.println("404 page");
-			response.setContent(new CreateContent().buildContent404()); ////change this !!!!!
 		}
 
-		System.out.println("Response in RequestHandler1: " + response.getContent());
+
+		//		if(this.pathMapper.containsKey(request.getParser().getRequestLinePath())) {
+		//			System.out.println("pathmapper contains the path");
+		//			(this.pathMapper.get(request.getParser().getRequestLinePath())).handle(request, response); //
+		//		} else {
+		//			//404
+		//			System.out.println("404 page");
+		//			response.setContent(new CreateContent().buildContent404()); ////change this !!!!!
+		//		}
+
+		//System.out.println("Response in RequestHandler1: " + response.getContent());
 		//writing to browser
 		writer.write(response.getContent());
 		writer.flush();

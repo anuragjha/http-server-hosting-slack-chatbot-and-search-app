@@ -67,7 +67,10 @@ public class FindHandler implements Handlers,Runnable {
 				//String content = new CreateContent("/find", queries.get("find")).buildContent();
 				//response.setContent(new CreateContent("/find", queries.get("asin")).buildContent());
 				response.setContent(new CreateContent().buildFindResult(queries.get("asin")));
+			} else {
+				response.setContent(new CreateContent().buildContent400());
 			}
+			
 		}
 		
 		

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cs601.project1;
+package searchPack;
 
 import java.io.File;
 

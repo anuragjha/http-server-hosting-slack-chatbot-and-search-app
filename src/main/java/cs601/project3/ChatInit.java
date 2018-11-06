@@ -12,6 +12,8 @@ public class ChatInit {
 
 	private int port;
 	private String loggerFile;
+	private String channel;
+
 	
 	/**
 	 * constructor
@@ -36,6 +38,13 @@ public class ChatInit {
 	public String getLoggerFile() {
 		return loggerFile;
 	}
+	
+	/**
+	 * @return the channel
+	 */
+	public String getChannel() {
+		return channel;
+	}
 
 
 	@Override
@@ -44,7 +53,7 @@ public class ChatInit {
 		
 		sb.append("port: " + this.port + "\n");
 		sb.append("loggerFile: " + this.loggerFile + "\n");
-	
+		sb.append("channel: " + this.channel + "\n");
 		return sb.toString();
 	}
 	

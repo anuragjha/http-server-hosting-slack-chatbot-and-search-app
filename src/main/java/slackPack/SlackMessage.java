@@ -1,7 +1,7 @@
 /**
  * 
  */
-package applications;
+package slackPack;
 
 /**
  * @author anuragjha

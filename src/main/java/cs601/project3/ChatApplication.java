@@ -1,14 +1,9 @@
 /**
  * 
  */
-package applications;
+package cs601.project3;
 
 
-import cs601.project3.ChatInit;
-import cs601.project3.CmdLineArgsValidator;
-import cs601.project3.InitJsonReader;
-import cs601.project3.Project2Logger;
-import cs601.project3.SearchInit;
 import handlers.ChatHandler;
 import server.TestServer1;
 
@@ -21,17 +16,24 @@ public class ChatApplication {
 	
 	private static ChatInit chatInit;
 	
+	/**
+	 * @return the chatInit
+	 */
+	public static ChatInit getChatInit() {
+		return chatInit;
+	}
+
 	public ChatApplication(ChatInit init) {
 		chatInit = init;
 		this.initializeLogger();
 	}
 	
 	private void initializeLogger() {
-		Project2Logger.initialize("Chat Application - " + chatInit.getPort(), chatInit.getLoggerFile());
+		Project3Logger.initialize("Chat Application - " + chatInit.getPort(), chatInit.getLoggerFile());
 	}
 	
 	public void closeLogger() {
-		Project2Logger.close();
+		Project3Logger.close();
 	}
 	
 	

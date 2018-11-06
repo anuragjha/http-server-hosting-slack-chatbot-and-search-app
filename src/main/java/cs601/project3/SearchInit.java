@@ -12,15 +12,16 @@ public class SearchInit {
 
 	private int port;
 	private String loggerFile;
-	private String[] inputFiles; //contains list of input files
+	private String[] reviewInputFiles; //contains list of review input files
+	private String[] qaInputFiles; //contains list of review input files
 	/**
 	 * constructor
 	 */
 	public SearchInit()	{
 		
 	}
-	
-	
+
+
 	/**
 	 * @return the port
 	 */
@@ -39,11 +40,21 @@ public class SearchInit {
 
 
 
+	
+	
 	/**
-	 * @return the inputFiles
+	 * @return the reviewInputFiles
 	 */
-	public String[] getInputFiles() {
-		return inputFiles;
+	public String[] getReviewInputFiles() {
+		return reviewInputFiles;
+	}
+
+
+	/**
+	 * @return the qaInputFiles
+	 */
+	public String[] getQaInputFiles() {
+		return qaInputFiles;
 	}
 
 
@@ -54,8 +65,15 @@ public class SearchInit {
 		
 		sb.append("port: " + this.port + "\n");
 		sb.append("loggerFile: " + this.loggerFile + "\n");
-		for(String file : inputFiles)	{
-			sb.append("inputFile: " + file + "\n");
+		sb.append("review input files:\n");
+		
+		for(String file : reviewInputFiles)	{
+			sb.append(file + "\n");
+		}
+		
+		sb.append("qa input files:\n");
+		for(String file : qaInputFiles)	{
+			sb.append(file + "\n");
 		}
 		
 		return sb.toString();

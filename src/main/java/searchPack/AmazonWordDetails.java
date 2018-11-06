@@ -1,4 +1,4 @@
-package cs601.project1;
+package searchPack;
 
 import java.util.Collections;
 import java.util.Comparator;

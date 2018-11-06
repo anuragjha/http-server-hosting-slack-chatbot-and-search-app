@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TestClient {
 	
 	private volatile static int id = 0;
-	private final int PORT = 8080;
+	private final int PORT = 9090;
 	private final String ip = "127.0.0.1";
 
 	public TestClient()	{

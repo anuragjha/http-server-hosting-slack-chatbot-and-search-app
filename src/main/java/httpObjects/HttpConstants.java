@@ -1,7 +1,7 @@
 /**
  * 
  */
-package htmlGenerator;
+package httpObjects;
 
 import java.util.EnumMap;
 
@@ -20,6 +20,7 @@ public class HttpConstants {
 	public static final String OK = "HTTP/1.0 200 OK\n" + "\r\n";
 	public static final String PAGENOTFOUND = "HTTP/1.0 404 Not Found\n" + "\r\n";
 	public static final String METHODNOTFOUND = "HTTP/1.0 405 Method Not Allowed\n" + "\r\n";
+	public static final String BADREQUEST = "HTTP/1.0 400 Bad Request\n" + "\r\n";
 
 
 }
