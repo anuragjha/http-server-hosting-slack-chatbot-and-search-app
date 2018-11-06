@@ -4,10 +4,11 @@
 package applications;
 
 
-import java.util.logging.Level;
-
-import cs601.project3.Project2Init;
+import cs601.project3.ChatInit;
+import cs601.project3.CmdLineArgsValidator;
+import cs601.project3.InitJsonReader;
 import cs601.project3.Project2Logger;
+import cs601.project3.SearchInit;
 import handlers.ChatHandler;
 import server.TestServer1;
 
@@ -18,15 +19,15 @@ import server.TestServer1;
  */
 public class ChatApplication {
 	
-	private static Project2Init init;
+	private static ChatInit chatInit;
 	
-	public ChatApplication() {
+	public ChatApplication(ChatInit init) {
+		chatInit = init;
 		this.initializeLogger();
 	}
 	
 	private void initializeLogger() {
-		Project2Logger.initialize("Chat Application - " /*+ init.getBrokerType(), init.getLoggerFile()*/,"chatAppLoggerFile.txt");
-
+		Project2Logger.initialize("Chat Application - " + chatInit.getPort(), chatInit.getLoggerFile());
 	}
 	
 	public void closeLogger() {
@@ -38,8 +39,8 @@ public class ChatApplication {
 	 * startApplication method binds the application to the port, where it listens to client request
 	 * @param port
 	 */
-	private void startApplication(int port) {
-		TestServer1 server = new TestServer1(port);
+	private void startApplication() {
+		TestServer1 server = new TestServer1(chatInit.getPort());
 		server.addMapping("/slackbot", new ChatHandler());
 		server.startup();
 	}
@@ -48,10 +49,21 @@ public class ChatApplication {
 	
 	public static void main(String[] args) {
 		
-		ChatApplication chatApplication = new ChatApplication();
+		ChatInit init;
 		
-		int port = 9090; //config 
-		chatApplication.startApplication(port);
+		if(new CmdLineArgsValidator().check(args))	{
+			//reading configuration file content into ChatInit object
+			init = (ChatInit) InitJsonReader.project3InitJsonReader(args[0], ChatInit.class);
+		}
+		else {
+			init = null;
+			System.out.println("Unable to initialize, exiting system");
+			System.exit(1);
+		}
+		
+		ChatApplication chatApplication = new ChatApplication(init);
+		
+		chatApplication.startApplication();
 	
 	}
 	

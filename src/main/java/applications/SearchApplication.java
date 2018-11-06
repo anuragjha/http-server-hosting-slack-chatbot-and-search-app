@@ -8,9 +8,9 @@ import java.util.logging.Level;
 import cs601.project1.FileValidator;
 import cs601.project1.JsonReviewHandler;
 import cs601.project3.CmdLineArgsValidator;
-import cs601.project3.Project2Init;
-import cs601.project3.Project2InitReader;
+import cs601.project3.InitJsonReader;
 import cs601.project3.Project2Logger;
+import cs601.project3.SearchInit;
 import handlers.FindHandler;
 import handlers.ReviewSearchHandler;
 import server.TestServer1;
@@ -23,19 +23,21 @@ import server.TestServer1;
 
 public class SearchApplication {
 
-	private static Project2Init init;
-	private String[] files;
+	private static SearchInit searchInit;
+	//private String[] files;
 	
-	public SearchApplication(String[] files) {
-		this.files = files;
-		this.buildAmazonSearchApp(this.files);
+	public SearchApplication(SearchInit init) {
+		searchInit = init;
+		//this.files = searchInit.getInputFiles();
+		//this.searchInit.getInputFiles()
+		this.buildAmazonSearchApp(searchInit.getInputFiles());
 		this.initializeLogger();
 	}
 
 	
 	private void initializeLogger() {
-		Project2Logger.initialize("Search Application - " /*+ init.getBrokerType(), init.getLoggerFile()*/,"SearchAppLoggerFile.txt");
-		for(String file : this.files) {
+		Project2Logger.initialize("Search Application - at port: " + searchInit.getPort(), searchInit.getLoggerFile());
+		for(String file : searchInit.getInputFiles()) {
 			Project2Logger.write(Level.INFO, "File to process: "+ file, 0);
 		}
 
@@ -70,11 +72,11 @@ public class SearchApplication {
 	 * startApplication method binds the application to the port, where it listens to client request
 	 * @param port
 	 */
-	private void startApplication(int port) {
+	private void startApplication() {
 		
 		
 
-		TestServer1 server = new TestServer1(port);
+		TestServer1 server = new TestServer1(searchInit.getPort());
 		//The request GET /reviewsearch will be dispatched to the 
 		//handle method of the ReviewSearchHandler.
 		server.addMapping("/reviewsearch", new ReviewSearchHandler());
@@ -89,20 +91,21 @@ public class SearchApplication {
 
 	public static void main(String[] args) {
 		
+		SearchInit init;
+		
 		if(new CmdLineArgsValidator().check(args))	{
-			//reading configuration file content into Project2Init object
-			init = Project2InitReader.project2InitjsonReader(args[0]);
+			//reading configuration file content into SearchInit object
+			init = (SearchInit) InitJsonReader.project3InitJsonReader(args[0], SearchInit.class);
 		}
 		else {
+			init = null;
 			System.out.println("Unable to initialize, exiting system");
 			System.exit(1);
 		}
 
-		String[] files = {"reviews_Cell_Phones_and_Accessories_5.json"}; //take from config file
-		SearchApplication searchApplication = new SearchApplication(files);
-
-		int port = 8080; //config file
-		searchApplication.startApplication(port);
+		SearchApplication searchApplication = new SearchApplication(init);
+		
+		searchApplication.startApplication();
 
 	}
 }

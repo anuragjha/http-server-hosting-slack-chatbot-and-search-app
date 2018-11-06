@@ -19,16 +19,17 @@ import com.google.gson.JsonSyntaxException;
  * @author anuragjha
  *
  */
-public class Project2InitReader {
+public class InitJsonReader {
 
-	private static Project2Init initProject2 = null;
-	
+	//private static Project2Init initProject2 = null;
+	private static SearchInit searchInit = null;
+	private static ChatInit chatInit = null;
 	
 	/**
 	 * jsonFileReader process Review file and then notifies DataStore 
 	 * @param inputFile
 	 */
-	public static Project2Init project2InitjsonReader(String file)	{
+	public static Object project3InitJsonReader(String file, Class<?> initClass)	{
 
 		JsonParser parser = new JsonParser();
 		Path path = Paths.get(file);	
@@ -45,11 +46,16 @@ public class Project2InitReader {
 				try {
 					//parses each line into JsonObject
 					JsonObject object =  parser.parse(line).getAsJsonObject();
-					//creates initProject2 object from the Json Object 
-					initProject2 = new Gson().fromJson(object, Project2Init.class);
+					//creates Init object from the Json Object 
+					if(initClass == SearchInit.class) {
+						searchInit = new Gson().fromJson(object, SearchInit.class);
+					} else if(initClass == ChatInit.class) {
+						chatInit = new Gson().fromJson(object, ChatInit.class);
+					}
+					
 
 				} catch(JsonSyntaxException jse)	{
-					System.out.println("Project2 init reader - Skipping line ...");
+					System.out.println("Project3 init reader - Skipping line ...");
 				}
 			}	
 
@@ -58,7 +64,16 @@ public class Project2InitReader {
 			System.out.println("Exiting System");
 			System.exit(0);
 		}
-		return initProject2;
+		
+		if(initClass == SearchInit.class) {
+			return searchInit;
+		} else if(initClass == ChatInit.class) {
+			return chatInit;
+		}
+		else {
+			return null;
+		}
+		
 	}
 	
 	

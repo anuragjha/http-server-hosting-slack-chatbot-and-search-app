@@ -10,13 +10,8 @@ package cs601.project3;
  */
 public class ChatInit {
 
-	private String brokerType;
+	private int port;
 	private String loggerFile;
-	private String[] inputFiles; //contains list of input files
-	private String[] subscribersNew; //contains list of output files
-	private String[] subscribersOld; //contains list of output files
-	private int queueSize;
-	private int poolSize;
 	
 	/**
 	 * constructor
@@ -27,19 +22,12 @@ public class ChatInit {
 	
 	
 	/**
-	 * @return the brokerType
+	 * @return the port
 	 */
-	public String getBrokerType() {
-		return brokerType;
+	public int getPort() {
+		return port;
 	}
 
-
-	/**
-	 * @return the inputFiles
-	 */
-	public String[] getInputFiles() {
-		return inputFiles;
-	}
 
 
 	/**
@@ -49,51 +37,13 @@ public class ChatInit {
 		return loggerFile;
 	}
 
-	/**
-	 * @return the subscribersNew
-	 */
-	public String[] getSubscribersNew() {
-		return subscribersNew;
-	}
-	
-	
-	/**
-	 * @return the subscribersOld
-	 */
-	public String[] getSubscribersOld() {
-		return subscribersOld;
-	}
-	
-	
-	/**
-	 * @return the queueSize
-	 */
-	public int getQueueSize() {
-		return queueSize;
-	}
 
-
-	/**
-	 * @return the poolSize
-	 */
-	public int getPoolSize() {
-		return poolSize;
-	}
-	
-	
+	@Override
 	public String toString()	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("brokerType: " + this.brokerType + "\n");
-		for(String file : inputFiles)	{
-			sb.append("inputFile: " + file + "\n");
-		}
+		
+		sb.append("port: " + this.port + "\n");
 		sb.append("loggerFile: " + this.loggerFile + "\n");
-		for(String file : this.subscribersNew)	{
-			sb.append("New Subscribers: " + file + "\n");
-		}
-		for(String file : this.subscribersOld)	{
-			sb.append("Old Subscribers: " + file);
-		}
 	
 		return sb.toString();
 	}
