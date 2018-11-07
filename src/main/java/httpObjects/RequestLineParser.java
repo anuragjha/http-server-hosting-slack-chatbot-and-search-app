@@ -4,11 +4,10 @@
 package httpObjects;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author anuragjha
- *
+ * RequestLineParser deals with parsing the request Line and finding queries 
  */
 public class RequestLineParser {
 
@@ -16,7 +15,10 @@ public class RequestLineParser {
 	//private String postRequestQueries;
 	private final boolean validRequest;
 
-
+	/**
+	 * constructor
+	 * @param requestLine
+	 */
 	public RequestLineParser(String requestLine) {
 		requestLineParts = requestLine.split(" ");
 		if(this.isRequestValid()) {
@@ -25,13 +27,8 @@ public class RequestLineParser {
 		else {
 			this.validRequest = false;
 		}
-		//postRequestQueries = null;
-	}
 
-	//	public RequestLineParser(String requestLine, String postMethodQueries) {
-	//		requestLineParts = requestLine.split("\\s+");
-	//postRequestQueries = postMethodQueries;
-	//	}
+	}
 
 
 	/**
@@ -41,11 +38,14 @@ public class RequestLineParser {
 		return requestLineParts;
 	}
 
-
+	/**
+	 * isRequestValid method ckecks if the request is valid
+	 * @return
+	 */
 	private boolean isRequestValid()	{
 		if((this.requestLineParts.length == 3))	{ //add more checks
 			if((this.checkIfHttpVersion1() || (this.checkIfHttpVersion0()))) {
-			
+
 				return true;
 			}
 		}
@@ -78,7 +78,7 @@ public class RequestLineParser {
 	/**
 	 * @return the getRequestLinePath
 	 */
-	private String getRequestLineHTTPVersion() {
+	public String getRequestLineHTTPVersion() {
 		if(this.validRequest) {
 			return requestLineParts[2];
 		}
@@ -86,7 +86,10 @@ public class RequestLineParser {
 	}
 
 
-
+	/**
+	 * checkIfGET method checks if the request method is GET
+	 * @return
+	 */
 	public boolean checkIfGET()	{
 		if(this.validRequest) {
 			return this.requestLineParts[0].equals(HttpConstants.GET);
@@ -94,7 +97,10 @@ public class RequestLineParser {
 		return false;
 	}
 
-
+	/**
+	 * checkIfPOST method checks if the request method is POST
+	 * @return
+	 */
 	public boolean checkIfPOST()	{
 		if(this.validRequest) {
 			return this.requestLineParts[0].equals(HttpConstants.POST);
@@ -102,7 +108,11 @@ public class RequestLineParser {
 		return false;
 	}
 
-	private boolean checkIfHttpVersion1()	{
+	/**
+	 * checkIfHttpVersion1 checks if the request is HTTP 1.1
+	 * @return
+	 */
+	public boolean checkIfHttpVersion1()	{
 		if((this.requestLineParts.length == 3)) {
 			if(this.requestLineParts[2].trim().equals("HTTP/1.1"))	{
 				return true;
@@ -111,7 +121,12 @@ public class RequestLineParser {
 		return false;
 	}
 
-	private boolean checkIfHttpVersion0()	{
+
+	/**
+	 * checkIfHttpVersion1 checks if the request is HTTP 1.0
+	 * @return
+	 */
+	public boolean checkIfHttpVersion0()	{
 		if((this.requestLineParts.length == 3)) {
 			if(this.requestLineParts[2].matches("HTTP/1.0"))	{
 				return true;
@@ -122,6 +137,7 @@ public class RequestLineParser {
 
 
 	/**
+	 * getRequestLineQueries method gives the key value pairs of queries in request line
 	 * @return queries HashMap or Null
 	 */
 	public HashMap<String, String> getRequestLineQueries()	{
@@ -142,6 +158,7 @@ public class RequestLineParser {
 	}
 
 	/**
+	 * getRequestLineQueries method gives the key value pairs of query in request body
 	 * @return queries HashMap or Null
 	 */
 	public HashMap<String, String> getRequestBodyQueries(String requestBody)	{
@@ -156,7 +173,7 @@ public class RequestLineParser {
 				if(keyValuePair.split("=").length == 2) {
 					queries.put(keyValuePair.split("=")[0], keyValuePair.split("=")[1]);
 				}
-				
+
 			}
 			return queries;
 		}
@@ -168,26 +185,6 @@ public class RequestLineParser {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		//RequestParser rp = new RequestParser("GET / HTTP/1.1");
-		RequestLineParser rp = new RequestLineParser("GET /?searchIn=reviewsSearch&query=abc HTTP/1.1");
-		for(String part : rp.requestLineParts) {
-			System.out.println("Request parts: " + part);
-		}
-		System.out.println("\nrequest valid?: " + rp.isRequestValid());
-		System.out.println("request method: " + rp.getRequestLineMethod());
-		System.out.println("request path: " + rp.getRequestLinePath());
-		System.out.println("request querys: ");
-		HashMap<String, String> kV = new HashMap<String,String>(rp.getRequestLineQueries());
-		for(String key : kV.keySet()) {
-			System.out.println("key: " + key + "\tvalue: " + kV.get(key));
-		}
-		System.out.println("request HTTP: " + rp.getRequestLineHTTPVersion() + "\n");
-		System.out.println(rp.checkIfGET());
-		System.out.println(rp.checkIfPOST());
-		System.out.println(rp.checkIfHttpVersion0());
-		System.out.println(rp.checkIfHttpVersion1());
 
 	}
 

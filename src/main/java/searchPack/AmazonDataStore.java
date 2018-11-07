@@ -85,7 +85,7 @@ public enum AmazonDataStore {
 		reviewDataStore.put(newRecord.getRecordId(), newRecord);
 		//updating reviewWordDataStore
 		this.reviewWordDataStore.getTextStringAndAddWords(
-				newRecord.getStringText(), newRecord.getRecordId());
+				newRecord.getStringText(), newRecord);
 	}
 	
 	/**

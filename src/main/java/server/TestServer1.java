@@ -8,14 +8,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import handlers.FindHandler;
 import handlers.Handlers;
-import handlers.ReviewSearchHandler;
 
 /**
  * TestServer1 class implements server
  * @author anuragjha
- *
  */
 public class TestServer1 {
 
@@ -24,14 +21,15 @@ public class TestServer1 {
 	private ServerSocket server;
 	private ExecutorService executer;
 	private HashMap<String, Handlers> pathMapper;
-	
+
 	private volatile boolean shouldRun;
+
 
 	/**
 	 * Constructing Server
 	 * @param port
 	 */
-	public TestServer1(int port)	{
+	public TestServer1(int port) {
 		this.PORT = port;
 		this.pathMapper = new HashMap<String, Handlers>();
 		try {
@@ -41,18 +39,17 @@ public class TestServer1 {
 			System.out.println("Error in constructing server");
 			System.exit(1);
 		}
-		
 	}
 
-	
+
 	/**
 	 * @return the pathMapper
 	 */
 	public HashMap<String, Handlers> getPathMapper() {
 		return pathMapper;
 	}
-	
-	
+
+
 	/**
 	 * addMapping method maps a request path to a specific handler
 	 * @param path
@@ -61,8 +58,8 @@ public class TestServer1 {
 	public void addMapping(String path, Handlers handler) {
 		pathMapper.put(path, handler);
 	}
-	
-	
+
+
 	/**
 	 * startup method starts the server
 	 */
@@ -107,7 +104,7 @@ public class TestServer1 {
 
 	}
 
-	
+
 	/**
 	 * closeServer method closes the server thread pool and empties the pathMapper
 	 */
@@ -134,11 +131,11 @@ public class TestServer1 {
 
 
 	public static void main(String[] args)	{
-		TestServer1 ts = new TestServer1(8080);
-		ts.addMapping("/reviewsearch", new ReviewSearchHandler());
-		ts.addMapping("/find", new FindHandler());
-		System.out.println("hashmap: " + ts.getPathMapper().toString());
-		ts.startup();
+		//		TestServer1 ts = new TestServer1(8080);
+		//		ts.addMapping("/reviewsearch", new ReviewSearchHandler());
+		//		ts.addMapping("/find", new FindHandler());
+		//		System.out.println("hashmap: " + ts.getPathMapper().toString());
+		//		ts.startup();
 	}
 
 }

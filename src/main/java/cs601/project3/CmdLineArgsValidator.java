@@ -9,7 +9,7 @@ import java.io.File;
  * @author anuragjha
  * CmdLineArgsValidator class checks if the cmd line argument is valid
  */
-public class CmdLineArgsValidator { //was enum in proj2
+public class CmdLineArgsValidator {
 
 	/**
 	 * check method takes in the array of arguments and processes the args to confirm validity

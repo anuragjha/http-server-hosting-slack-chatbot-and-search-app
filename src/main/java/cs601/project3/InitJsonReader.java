@@ -21,10 +21,9 @@ import com.google.gson.JsonSyntaxException;
  */
 public class InitJsonReader {
 
-	//private static Project2Init initProject2 = null;
 	private static SearchInit searchInit = null;
 	private static ChatInit chatInit = null;
-	
+
 	/**
 	 * jsonFileReader process Review file and then notifies DataStore 
 	 * @param inputFile
@@ -33,7 +32,7 @@ public class InitJsonReader {
 
 		JsonParser parser = new JsonParser();
 		Path path = Paths.get(file);	
-		
+
 
 		try(
 				BufferedReader reader = Files.newBufferedReader(path, Charset.forName("ISO-8859-1"))
@@ -52,7 +51,7 @@ public class InitJsonReader {
 					} else if(initClass == ChatInit.class) {
 						chatInit = new Gson().fromJson(object, ChatInit.class);
 					}
-					
+
 
 				} catch(JsonSyntaxException jse)	{
 					System.out.println("Project3 init reader - Skipping line ...");
@@ -64,7 +63,7 @@ public class InitJsonReader {
 			System.out.println("Exiting System");
 			System.exit(0);
 		}
-		
+
 		if(initClass == SearchInit.class) {
 			return searchInit;
 		} else if(initClass == ChatInit.class) {
@@ -73,20 +72,17 @@ public class InitJsonReader {
 		else {
 			return null;
 		}
-		
+
 	}
-	
-	
-	
-	
-	
+
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		
+
+
 		//Project2Init init = Project2InitReader.project2InitjsonReader();
 		//System.out.println("init: " + init);
 

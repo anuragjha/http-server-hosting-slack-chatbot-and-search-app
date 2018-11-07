@@ -5,7 +5,7 @@ package slackPack;
 
 /**
  * @author anuragjha
- *
+ * SlackMessage class stores the channel and the message for Slack
  */
 public class SlackMessage {
 	//String token = "Bearer xoxp-378520430422-387093128722-470265812229-bd58615896c703c3c4ca1284ca204b70";

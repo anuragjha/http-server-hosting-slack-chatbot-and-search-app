@@ -7,44 +7,32 @@ import java.util.HashMap;
 
 /**
  * @author anuragjha
- *
+ * HTTPRequest class stores the HTTP request
  */
 public class HTTPRequest {
-	
+
 	private String requestLine;
 	private String requestHeader;
 	private String requestBody;
-	
+
 	private RequestLineParser parser; 
 
 	private String requestMethod = "";
 	private String requestPath = "";
 	private HashMap<String, String> requestQueries = new HashMap<String, String>();
-	
-	
+
+	/*
+	 * constructor
+	 */
 	public HTTPRequest(String requestLine) {
 		this.requestLine = requestLine;
 		this.parser = new RequestLineParser(this.requestLine);
 		this.requestHeader = "";
 		this.requestBody = "";
 	}
-	
-	public HTTPRequest() {
-		this.requestLine = "";
-		this.parser = new RequestLineParser(this.requestLine);
-		this.requestHeader = "";
-		this.requestBody = "";
-	}
 
-//	public HTTPRequest(String requestLine, String requestHeader, String requestBody)	{
-//		this.requestLine = requestLine;
-//		this.parser = new RequestLineParser(this.requestLine);
-//		this.requestMethod = this.parser.getRequestLineMethod();
-//		this.requestPath = this.parser.getRequestLinePath();
-//		this.requestBody = requestBody;
-//		
-//	}
-	
+
+	@Override
 	public String toString() {
 		StringBuffer toString = new StringBuffer();
 		if(requestLine.length() > 0) {
@@ -58,7 +46,8 @@ public class HTTPRequest {
 		}
 		return "HTTPRequest: empty";
 	}
-	
+
+
 	/**
 	 * @return the parser
 	 */
@@ -156,10 +145,10 @@ public class HTTPRequest {
 	public void setParser(RequestLineParser parser) {
 		this.parser = parser;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 
 }

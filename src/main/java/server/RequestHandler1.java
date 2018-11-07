@@ -10,16 +10,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.logging.Level;
 
+import cs601.project3.Project3Logger;
 import handlers.Handlers;
 import htmlGenerator.CreateContent;
 import httpObjects.HTTPRequest;
 import httpObjects.HTTPResponse;
-import httpObjects.HttpConstants;
 
 /**
  * @author anuragjha
- *
+ * RequestHandler1 class handles the incoming client request
  */
 public class RequestHandler1 implements Runnable {
 
@@ -29,7 +30,11 @@ public class RequestHandler1 implements Runnable {
 	HTTPRequest request;
 	HTTPResponse response;
 
-
+	/**
+	 * constructor
+	 * @param clientSocket
+	 * @param pathMapper
+	 */
 	public RequestHandler1(Socket clientSocket, HashMap<String, Handlers> pathMapper) {
 		socket = clientSocket;
 		this.pathMapper = pathMapper;
@@ -63,11 +68,13 @@ public class RequestHandler1 implements Runnable {
 	 * @throws IOException
 	 */
 	private void readHTTPRequest(InputStream instream) throws IOException {
+		Project3Logger.write(Level.INFO, "***NEW REQUEST***", 0);
+
 		//reads the request line - method, query string and http protocol version
-		//if(instream.available() > 0)	{
 		String requestLine = oneLine(instream);
-		//request.setRequestLine(oneLine(instream));
+
 		System.out.println("request: " + requestLine);
+		Project3Logger.write(Level.INFO, "request: " + requestLine, 0);
 
 		if(requestLine != null && !requestLine.trim().isEmpty())	{ //main logic 
 			request	= new HTTPRequest(requestLine);
@@ -75,9 +82,9 @@ public class RequestHandler1 implements Runnable {
 			this.readHTTPRequestHeaders(instream);		
 
 		} else { //requestLine is empty
-			//request	= new HTTPRequest();
-			System.out.println("Empty Request");
 
+			System.out.println("Empty Request");
+			Project3Logger.write(Level.INFO, "Empty Request", 0);
 		}
 		//}
 	}
@@ -101,6 +108,7 @@ public class RequestHandler1 implements Runnable {
 			}
 		}
 		System.out.println("RequestHeader: \n" + requestHeader.toString());
+		Project3Logger.write(Level.INFO, "RequestHeader: \n" + requestHeader.toString(), 0);
 		request.setRequestHeader(requestHeader.toString());
 
 		if(contentLength > 0) {
@@ -156,7 +164,8 @@ public class RequestHandler1 implements Runnable {
 			read += socket.getInputStream().read(bytes, read, (bytes.length-read));
 		}
 		System.out.println("Bytes expected: " + contentLength + " Bytes read: " + read);
-		System.out.println("MESSAGE: " + new String(bytes, StandardCharsets.UTF_8));
+		System.out.println("Request Body: " + new String(bytes, StandardCharsets.UTF_8));
+		Project3Logger.write(Level.INFO, "Request Body: " + new String(bytes, StandardCharsets.UTF_8), 0);
 
 		request.setRequestBody(new String(bytes, StandardCharsets.UTF_8));
 
@@ -196,7 +205,7 @@ public class RequestHandler1 implements Runnable {
 		if(!(request.getParser().checkIfGET()) &&
 				!(request.getParser().checkIfPOST())) {  //method not found 405
 			response.setContent(new CreateContent().buildContent405()); 
-		
+
 		} else { //method found
 
 			if(this.pathMapper.containsKey(request.getParser().getRequestLinePath())) { //path found
@@ -210,18 +219,6 @@ public class RequestHandler1 implements Runnable {
 
 		}
 
-
-		//		if(this.pathMapper.containsKey(request.getParser().getRequestLinePath())) {
-		//			System.out.println("pathmapper contains the path");
-		//			(this.pathMapper.get(request.getParser().getRequestLinePath())).handle(request, response); //
-		//		} else {
-		//			//404
-		//			System.out.println("404 page");
-		//			response.setContent(new CreateContent().buildContent404()); ////change this !!!!!
-		//		}
-
-		//System.out.println("Response in RequestHandler1: " + response.getContent());
-		//writing to browser
 		writer.write(response.getContent());
 		writer.flush();
 	}

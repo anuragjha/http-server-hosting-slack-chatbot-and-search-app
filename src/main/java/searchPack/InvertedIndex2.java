@@ -40,7 +40,6 @@ public class InvertedIndex {
 
 		// build a datatype for this ==> this.invertedIndex.get(word) to have sorted result
 		return this.invertedIndex.get(word);
-		
 	}
 
 
@@ -49,7 +48,7 @@ public class InvertedIndex {
 	 * @param newString
 	 * @param recordId
 	 */
-	public void getTextStringAndAddWords(String newString, AmazonReviews recordId)	{
+	public void getTextStringAndAddWords(String newString, int recordId)	{
 		String[] newWordStringArray = newString.split(" ");
 		if(newWordStringArray != null) {
 			for(String word : newWordStringArray)	{
@@ -71,7 +70,7 @@ public class InvertedIndex {
 	 * @param word
 	 * @param recordId
 	 */
-	private void add(String word, AmazonReviews recordId)	{
+	private void add(String word, int recordId)	{
 		if(this.invertedIndex.containsKey(word))	{ // key - word is already present
 			if(this.invertedIndex.get(word).getInvertedIndexValues().containsKey(recordId))	{ //recordId is already present
 				int currentFreq = this.invertedIndex.get(word).getInvertedIndexValues().get(recordId);

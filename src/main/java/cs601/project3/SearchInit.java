@@ -6,7 +6,6 @@ package cs601.project3;
 /**
  * @author anuragjha
  * Project2Init class holds the config information 
- *
  */
 public class SearchInit {
 
@@ -14,11 +13,11 @@ public class SearchInit {
 	private String loggerFile;
 	private String[] reviewInputFiles; //contains list of review input files
 	private String[] qaInputFiles; //contains list of review input files
+
 	/**
 	 * constructor
 	 */
 	public SearchInit()	{
-		
 	}
 
 
@@ -39,9 +38,6 @@ public class SearchInit {
 	}
 
 
-
-	
-	
 	/**
 	 * @return the reviewInputFiles
 	 */
@@ -62,24 +58,24 @@ public class SearchInit {
 	@Override
 	public String toString()	{
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("port: " + this.port + "\n");
 		sb.append("loggerFile: " + this.loggerFile + "\n");
 		sb.append("review input files:\n");
-		
+
 		for(String file : reviewInputFiles)	{
 			sb.append(file + "\n");
 		}
-		
+
 		sb.append("qa input files:\n");
 		for(String file : qaInputFiles)	{
 			sb.append(file + "\n");
 		}
-		
+
 		return sb.toString();
 	}
-	
-	
+
+
 	/**
 	 * @param args
 	 */

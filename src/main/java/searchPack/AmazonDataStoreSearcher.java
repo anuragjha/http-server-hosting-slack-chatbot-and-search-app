@@ -121,7 +121,7 @@ public class AmazonDataStoreSearcher {
 	 * getReviewSearch method is a public method that calls reviewSearch method
 	 * @param cmdTerm
 	 */
-	public LinkedHashMap<Integer,Integer> getReviewSearch(String cmdTerm)	{
+	public LinkedHashMap<AmazonReviews,Integer> getReviewSearch(String cmdTerm)	{
 		return this.reviewSearch(cmdTerm);
 	}
 
@@ -130,7 +130,7 @@ public class AmazonDataStoreSearcher {
 	 * reviewSearch method prints out the Review Records that match the term
 	 * @param cmdTerm
 	 */
-	private  LinkedHashMap<Integer, Integer> reviewSearch(String cmdTerm)	{
+	private  LinkedHashMap<AmazonReviews, Integer> reviewSearch(String cmdTerm)	{
 
 		//this.responseResult = new StringBuilder();
 		this.resultCount = 0;
@@ -159,9 +159,9 @@ public class AmazonDataStoreSearcher {
 	}
 	
 	
-	private  LinkedHashMap<Integer, Integer> reviewSearchResults(String cmdTerm)	{
+	private  LinkedHashMap<AmazonReviews, Integer> reviewSearchResults(String cmdTerm)	{
 
-			return (LinkedHashMap<Integer, Integer>) AmazonDataStore.ONE.getReviewWordDataStore().searchWord(cmdTerm).createSortedOutput();
+			return (LinkedHashMap<AmazonReviews, Integer>) AmazonDataStore.ONE.getReviewWordDataStore().searchWord(cmdTerm).createSortedOutput();
 
 	}
 
