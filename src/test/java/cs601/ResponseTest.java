@@ -1,3 +1,4 @@
+package cs601;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -212,6 +213,7 @@ public class ResponseTest {
 		assertEquals("HTTP/1.0 200 OK", httpFetcher.requestLine.trim());
 	}
 
-	
 
+	
+	
 }

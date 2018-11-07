@@ -1,3 +1,4 @@
+package cs601;
 import org.junit.Test;
 
 import htmlGenerator.CreateContent;
@@ -11,9 +12,16 @@ public class HtmlContentTest {
 	*/
 	
 	@Test
-	public void buildReviewSearchForm() {
+	public void testBuildReviewSearchForm() {
 		CreateContent cc = new CreateContent();
 		System.out.println("\n" + cc.buildReviewSearchForm());
+		
+	}
+	
+	@Test
+	public void testBuildReviewSearchResult() {
+		CreateContent cc = new CreateContent();
+		System.out.println("\n" + cc.buildReviewSearchResult("the"));
 		
 	}
 	
@@ -23,6 +31,14 @@ public class HtmlContentTest {
 		System.out.println("\n" + cc.buildFindForm()); 
 		
 	}
+	
+	@Test
+	public void buildFindResult() {
+		CreateContent cc = new CreateContent();
+		System.out.println("\n" + cc.buildFindResult("7532385086")); 
+		
+	}
+	
 		
 	@Test
 	public void buildChatForm() {
@@ -63,5 +79,7 @@ public class HtmlContentTest {
 		CreateContent cc = new CreateContent();
 		System.out.println("\n" + cc.buildContent405());
 	}
+	
+	
 	
 }

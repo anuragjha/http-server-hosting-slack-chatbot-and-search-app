@@ -1,3 +1,4 @@
+package cs601;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,9 +97,11 @@ public class HTTPFetcher {
 	}
 
 	public static void main(String[] args) {
-		//System.out.println(download("www.yelp.com", "/biz/the-velo-rouge-cafe-san-francisco"));
+		
 		//System.out.println(download(8080, "localhost", "/reviewsearch"));
-		//System.out.println(download(8080, "localhost", "GET" ,  "/reviewsearch", "query=harness"));
+		//System.out.println(download(8080, "localhost", "POST" ,  "/reviewsearch", "query=harness").requestBody);
+		//System.out.println(download(8080, "localhost", "POST" ,  "/find", "asin=3998899561").requestBody); //3998899561
+		//System.out.println(download(9090, "localhost", "POST" ,  "/slackbot", "message= bring harness").requestBody);
 	}
 
 }
