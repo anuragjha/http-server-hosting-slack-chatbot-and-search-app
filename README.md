@@ -61,7 +61,7 @@ public class ChatApplication {
 
 ```
 
-## Part 2 - Search Application
+## Part 2 - Search Application (https://github.com/anuragjha/scalable-elastic-search)
 
 For Part 2 of this assignment you will implement an application that will allow users to search the `InvertedIndex` you built for Project 1. You will deploy this application on your [primary microcloud VM](https://github.com/CS601-F18/notes/blob/master/admin/mcassignments.md) on port **8080**.
 
